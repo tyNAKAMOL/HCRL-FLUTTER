@@ -16,13 +16,13 @@ class _selectMemeState extends State<selectMeme> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.amber[200],
+        backgroundColor: Colors.deepPurple[300],
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.black,
+          backgroundColor: const Color(0xFF2C1843),
           title: const Text(
             "Select Meme",
-            style: TextStyle(color: Colors.amber),
+            style: TextStyle(color: Colors.white),
           ),
         ),
         body: GridView.builder(
@@ -45,7 +45,6 @@ class _selectMemeState extends State<selectMeme> {
               fit: BoxFit.cover,
             ),
           ),
-          
         ));
   }
 }
