@@ -8,13 +8,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Home',
               style: TextStyle(fontSize: 20),
             ),
@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
                     print(e.message);
                   }
                 },
-                child: Text(
+                child: const Text(
                   'Sign Out',
                   style: TextStyle(fontSize: 20),
                 ))
