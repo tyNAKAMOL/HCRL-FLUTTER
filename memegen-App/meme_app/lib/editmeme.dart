@@ -10,6 +10,8 @@ import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 
+int fontSize = 52;
+
 class EditMeme extends StatefulWidget {
   final String imageName;
   const EditMeme({Key? key, required this.imageName}) : super(key: key);
@@ -19,17 +21,56 @@ class EditMeme extends StatefulWidget {
 }
 
 class _EditMemeState extends State<EditMeme> {
+  static double custFontSize = 52;
   String topText = "";
   String bottomText = "";
   // ignore: unnecessary_new
+  createAlertDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("data"),
+            content: TextField(
+              onChanged: (text) {
+                // setState(() {
+                topText = text;
+                // });
+              },
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                  elevation: 5.0,
+                  child: Text('click'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    setState(() {});
+                  }),
+            ],
+          );
+        });
+  }
+
   GlobalKey globalKey = new GlobalKey();
 
-  @override
-  void initState() {
-    super.initState();
-    topText = "Top text";
-    bottomText = "Bottom text";
+  void increaseFontSize() async {
+    setState(() {
+      custFontSize += 2;
+    });
   }
+
+  void decreaseFontSize() async {
+    setState(() {
+      if (custFontSize > 20) {
+        custFontSize -= 2;
+      }
+    });
+  }
+  // void initState() {
+  //   super.initState();
+  //   topText = "Top text";
+  //   bottomText = "Bottom text";
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +112,11 @@ class _EditMemeState extends State<EditMeme> {
                   child: Stack(
                     children: [
                       Image.asset("assets/meme/${widget.imageName}.jpg"),
-                      // Positioned(
-                      //   top: 30,
-                      //   left: 60,
-                      //   // child: buildStrokeText(topText),
-                      // ),
+                      Positioned(
+                        top: 30,
+                        left: 60,
+                        child: buildStrokeText(topText),
+                      ),
                       // Positioned(
                       //   top: 200,
                       //   left: 60,
@@ -93,7 +134,9 @@ class _EditMemeState extends State<EditMeme> {
                   CircleAvatar(
                       backgroundColor: Colors.green[400],
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          increaseFontSize();
+                        },
                         icon: Icon(Icons.add),
                         color: Colors.black,
                       )),
@@ -101,7 +144,10 @@ class _EditMemeState extends State<EditMeme> {
                   CircleAvatar(
                       backgroundColor: Colors.red[400],
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          decreaseFontSize();
+                          print(custFontSize);
+                        },
                         icon: Icon(Icons.remove),
                         color: Colors.black,
                       )),
@@ -126,7 +172,9 @@ class _EditMemeState extends State<EditMeme> {
                                             BorderRadius.circular(18.0),
                                         side: BorderSide(
                                             color: Color(0xFF2C1843))))),
-                            onPressed: () {},
+                            onPressed: () {
+                              createAlertDialog(context);
+                            },
                             icon: Icon(Icons.text_fields_rounded),
                             label: Text("add Text")),
                       ),
@@ -246,7 +294,7 @@ class _EditMemeState extends State<EditMeme> {
       children: [
         Text(text,
             style: TextStyle(
-              fontSize: 52,
+              fontSize: custFontSize,
               fontWeight: FontWeight.bold,
               foreground: Paint()
                 ..style = PaintingStyle.stroke
@@ -254,8 +302,8 @@ class _EditMemeState extends State<EditMeme> {
                 ..color = Colors.black,
             )),
         Text(text,
-            style: const TextStyle(
-                fontSize: 52,
+            style: TextStyle(
+                fontSize: custFontSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.white)),
       ],
