@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 
 import 'dart:io';
 import 'dart:typed_data';
@@ -22,6 +22,9 @@ class EditMeme extends StatefulWidget {
 
 class _EditMemeState extends State<EditMeme> {
   static double custFontSize = 52;
+  var x = 0.0;
+  var y = 0.0;
+  final GlobalKey stackKey = GlobalKey();
   String topText = "";
   String bottomText = "";
   // ignore: unnecessary_new
@@ -113,10 +116,21 @@ class _EditMemeState extends State<EditMeme> {
                     children: [
                       Image.asset("assets/meme/${widget.imageName}.jpg"),
                       Positioned(
-                        top: 30,
-                        left: 60,
-                        child: buildStrokeText(topText),
-                      ),
+                          top: y,
+                          left: x,
+                          child: Draggable(
+                              child: buildStrokeText(topText),
+                              feedback: buildStrokeText(topText),
+                              childWhenDragging: Container(),
+                              onDragEnd: (dragDetails) {
+                                // 10.
+                                setState(() {
+                                  final parentPos = stackKey.globalPaintBounds;
+                                  if (parentPos == null) return;
+                                  x = dragDetails.offset.dx - parentPos.left;
+                                  y = dragDetails.offset.dy - parentPos.top;
+                                });
+                              })),
                       // Positioned(
                       //   top: 200,
                       //   left: 60,
@@ -326,7 +340,21 @@ class _EditMemeState extends State<EditMeme> {
 
       Share.shareFiles(['$directory/meme.png']);
     } catch (e) {
+      // ignore: avoid_print
       print(e);
+    }
+  }
+}
+
+extension GlobalKeyExtension on GlobalKey {
+  Rect? get globalPaintBounds {
+    final renderObject = currentContext?.findRenderObject();
+    var translation = renderObject?.getTransformTo(null).getTranslation();
+    if (translation != null && renderObject!.paintBounds != null) {
+      return renderObject.paintBounds
+          .shift(Offset(translation.x, translation.y));
+    } else {
+      return null;
     }
   }
 }
